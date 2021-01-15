@@ -1,4 +1,4 @@
-package Webflux.demo.model;
+package Webflux.demo.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -7,16 +7,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class WeatherEvent {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class CountryDTO {
+    private String get;
 
-    private Weather weather;
+    private String[] parameters;
 
-    private LocalDateTime date;
+    private String[] errors;
+
+    private int results;
+
+    private String[] response;
+
 }

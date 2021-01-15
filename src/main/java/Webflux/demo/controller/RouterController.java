@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 @RestController()
 @RequestMapping("/webflux")
 public class RouterController {
+    
     @Autowired
     private WeatherService weatherService;
 
