@@ -1,6 +1,8 @@
 package Webflux.demo.service;
 
 import Webflux.demo.model.dto.CountryDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -9,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.Arrays;
 
 @Service
 public class RestService {
@@ -32,7 +36,16 @@ public class RestService {
                 break;
             case "webclient":
                 WebClient webClient = this.initWebClient();
-                responseString = webClient.get().retrieve().bodyToMono(String.class);
+                responseString = webClient.get().retrieve().bodyToMono(String.class).subscribe(data ->{
+                    System.out.println(data);
+                    JsonMapper mapper = new JsonMapper();
+                    try {
+                        CountryDTO dto = mapper.readValue(data,CountryDTO.class);
+                        System.out.println(Arrays.toString(dto.getResponse()));
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+                });
                 break;
         }
         return ResponseEntity.ok(responseString);
@@ -48,7 +61,16 @@ public class RestService {
                 break;
             case "webclient":
                 WebClient webClient = this.initWebClient();
-                responseObject = webClient.get().retrieve().bodyToMono(CountryDTO.class);
+                responseObject = webClient.get().retrieve().bodyToMono(CountryDTO.class).subscribe(data -> {
+
+                    // lấy danh sách các quốc gia từ data
+                    String[] countries = data.getResponse();
+                    System.out.println(Arrays.toString(countries));
+
+                    // lấy số lượng quốc gia từ data
+                    int results = data.getResults();
+                    System.out.println(results + 100);
+                });
                 break;
         }
         return ResponseEntity.ok(responseObject);
